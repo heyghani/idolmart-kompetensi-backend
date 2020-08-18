@@ -1,0 +1,7 @@
+POST http://localhost:5000/api/report/anggota
+content-type: application/json
+
+{
+    "kode_divisi" : "405",
+    "kelas" : 1
+}

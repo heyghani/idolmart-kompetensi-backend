@@ -26,6 +26,7 @@ const {
 	getUser,
 	getAnggotaDivisi,
 	login,
+	signup,
 	getReport,
 	getReportAnggota,
 } = require("./users/Users");
@@ -45,6 +46,7 @@ const {
 const { getBobot, filterByKompetensi } = require("./bobot/bobot");
 
 app.post("/api/login", login);
+app.post("/api/signup", signup);
 app.get("/api/user/:id", getUser);
 app.post("/api/divisi", getAnggotaDivisi);
 

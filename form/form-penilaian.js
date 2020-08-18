@@ -15,7 +15,7 @@ exports.getValidationForm = (req, res) => {
 };
 
 exports.getAssignmentAtasan = (req, res) => {
-	let sql = `SELECT nilai_atasan FROM master_jawaban WHERE nik='${req.body.nik}' AND periode='${req.body.periode}'`;
+	let sql = `SELECT kelas FROM master_jawaban WHERE nik='${req.body.nik}' AND periode='${req.body.periode}'`;
 	connection.query(sql, (err, result) => {
 		if (err) console.log("error : " + err);
 		res.send(
@@ -76,7 +76,7 @@ exports.postForm = (req, res) => {
 					if (err) console.log(err);
 
 					let sql = `INSERT INTO master_jawaban 
-				(nik, kode_kompetensi,bobot,nilai,skor,jumlah,rekap,keterangan,nilai_atasan,skor_atasan,jumlah_atasan,rekap_atasan,periode) 
+				(nik, kode_kompetensi,bobot,nilai,skor,jumlah,rekap,keterangan,nilai_atasan,skor_atasan,jumlah_atasan,rekap_atasan,periode,kelas) 
 				VALUES ?`;
 					connection.query(sql, values, (err, result) => {
 						if (err) console.log("error : " + err);
@@ -91,7 +91,7 @@ exports.postForm = (req, res) => {
 				});
 			} else {
 				let sql = `INSERT INTO master_jawaban 
-		(nik, kode_kompetensi,bobot,nilai,skor,jumlah,rekap,keterangan,nilai_atasan,skor_atasan,jumlah_atasan,rekap_atasan,periode) 
+		(nik, kode_kompetensi,bobot,nilai,skor,jumlah,rekap,keterangan,nilai_atasan,skor_atasan,jumlah_atasan,rekap_atasan,periode,kelas) 
 		VALUES ?`;
 				connection.query(sql, values, (err, result) => {
 					if (err) console.log("error : " + err);
@@ -116,7 +116,7 @@ exports.updateForm = (req, res) => {
 
 		let sql = `INSERT INTO master_jawaban 
 		(nik, kode_kompetensi,bobot,nilai,skor,jumlah,rekap,keterangan,
-		keterangan_atasan,nilai_atasan,skor_atasan,jumlah_atasan,rekap_atasan,periode) 
+		keterangan_atasan,nilai_atasan,skor_atasan,jumlah_atasan,rekap_atasan,periode,kelas) 
 		VALUES ?`;
 		connection.query(sql, values, (err, result) => {
 			if (err) console.log("error : " + err);
@@ -161,7 +161,7 @@ WHERE master_kompetensi.level_jabatan LIKE '%${req.params.id}%' AND master_bobot
 };
 
 exports.getNilai = (req, res) => {
-	let sql = `SELECT nilai,skor,nilai_atasan,keterangan FROM master_jawaban WHERE nik='${req.body.nik}' AND periode='${req.body.periode}'`;
+	let sql = `SELECT * FROM master_jawaban WHERE nik='${req.body.nik}' AND periode='${req.body.periode}'`;
 	connection.query(sql, (err, result) => {
 		if (err) console.log("error : " + err);
 
