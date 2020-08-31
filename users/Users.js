@@ -1,5 +1,7 @@
 const { connection } = require("../db");
 const bcrypt = require("bcrypt");
+const _ = require("lodash");
+const { result } = require("lodash");
 
 exports.signup = async (req, res) => {
 	const { password, confirmPassword, nik } = req.body;
@@ -98,12 +100,56 @@ exports.getAnggotaDivisi = (req, res) => {
 };
 
 exports.getReport = (req, res) => {
-	let sql = `SELECT a.name,a.level_jabatan,b.nama, c.* FROM master_jawaban c
-INNER JOIN karyawan a ON c.nik=a.nik
-INNER JOIN master_kompetensi b ON c.kode_kompetensi=b.kode_kompetensi
-WHERE c.periode="${req.body.periode}"`;
+	let sql = `SELECT a.nik,a.name as nama, b.nama as jabatan,c.kode_kompetensi,c.nilai FROM karyawan a
+INNER JOIN jabatan b ON a.kode_jabatan=b.kode_jabatan
+INNER JOIN master_jawaban c ON a.nik=c.nik
+WHERE a.kode_divisi="${req.body.kode_divisi}" AND c.periode="${req.body.periode}"`;
 	connection.query(sql, (err, result) => {
 		if (err) console.log(err);
+		const data = [];
+
+		_.forEach(result, (item, index) => {
+			var existing = data.filter((value, i) => {
+				return value.nik === item.nik;
+			});
+
+			if (existing.length) {
+				var existingIndex = data.indexOf(existing[0]);
+
+				data[existingIndex].nilai.push({
+					kode_kompetensi: item.kode_kompetensi,
+					nilai: item.nilai,
+				});
+			} else {
+				data.push({
+					nik: item.nik,
+					nama: item.nama,
+					jabatan: item.jabatan,
+					nilai: [
+						{
+							kode_kompetensi: item.kode_kompetensi,
+							nilai: item.nilai,
+						},
+					],
+				});
+			}
+		});
+
+		res.send(
+			JSON.stringify({
+				response: data,
+			})
+		);
+	});
+};
+
+exports.getReportAnggota = (req, res) => {
+	let sql = `SELECT a.nik,a.name,b.nama as jabatan FROM karyawan a
+	INNER JOIN jabatan b ON a.kode_jabatan=b.kode_jabatan
+	WHERE kode_divisi="${req.body.kode_divisi}" AND kelas > ${req.body.kelas}`;
+	connection.query(sql, (err, result) => {
+		if (err) console.log(err);
+
 		res.send(
 			JSON.stringify({
 				response: result,
@@ -112,18 +158,9 @@ WHERE c.periode="${req.body.periode}"`;
 	});
 };
 
-exports.getReportAnggota = (req, res) => {
-	let sql = `SELECT a.* , b.nama as jabatan, c.nilai FROM karyawan a
-INNER JOIN jabatan b on a.kode_jabatan = b.kode_jabatan
-INNER JOIN master_jawaban c ON a.nik=c.nik
-WHERE a.kode_divisi="${req.body.kode_divisi}" AND a.kelas > ${req.body.kelas}`;
+exports.testing = (req, res) => {
+	let sql = "SELECT nik,kode_kompetensi,nilai FROM master_jawaban";
 	connection.query(sql, (err, result) => {
-		if (err) console.log(err);
-
-		res.send(
-			JSON.stringify({
-				response: result,
-			})
-		);
+		res.send(result);
 	});
 };

@@ -29,6 +29,7 @@ const {
 	signup,
 	getReport,
 	getReportAnggota,
+	testing,
 } = require("./users/Users");
 
 const {
@@ -76,6 +77,8 @@ app.post("/api/filter/kompetensi", filterByKompetensi);
 
 app.post("/api/report/get", getReport);
 app.post("/api/report/anggota", getReportAnggota);
+
+app.get("/api/report/test", testing);
 
 app.listen(port, () => {
 	console.log("Server is running on port : " + port);
