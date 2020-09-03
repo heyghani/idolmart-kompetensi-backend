@@ -64,7 +64,7 @@ exports.updateKompetensi = (req, res) => {
 	WHERE id="${req.body.id}"`;
 	connection.query(sql, (err, result) => {
 		if (err) console.log(err);
-		console.log(result);
+
 		res.send(
 			JSON.stringify({
 				response: "Data berhasil diupdate",

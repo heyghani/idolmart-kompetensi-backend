@@ -1,18 +1,18 @@
-# POST http://localhost:5000/api/report/anggota
+POST http://localhost:5000/api/nilai
+content-type: application/json
+
+{
+    "nik" : "202394",
+    "periode" : "periode2"
+}
+
+# POST http://localhost:5000/api/report/get
 # content-type: application/json
 
 # {
 #     "kode_divisi" : "405",
+#     "periode" : "periode1",
 #     "kelas" : 1
 # }
-
-POST http://localhost:5000/api/report/get
-content-type: application/json
-
-{
-    "kode_divisi" : "405",
-    "periode" : "periode1",
-    "kelas" : 1
-}
 
 # GET  http://localhost:5000/api/report/test

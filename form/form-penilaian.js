@@ -164,14 +164,23 @@ exports.getNilai = (req, res) => {
 	let sql = `SELECT * FROM master_jawaban WHERE nik='${req.body.nik}' AND periode='${req.body.periode}'`;
 	connection.query(sql, (err, result) => {
 		if (err) console.log("error : " + err);
-
-		res.send(
-			JSON.stringify({
-				status: 200,
-				error: null,
-				response: result,
-			})
-		);
+		if (result.length) {
+			res.send(
+				JSON.stringify({
+					status: 200,
+					error: null,
+					response: result,
+				})
+			);
+		} else {
+			res.send(
+				JSON.stringify({
+					status: 400,
+					error: true,
+					response: "Data pada periode ini kosong",
+				})
+			);
+		}
 	});
 };
 
