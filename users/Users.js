@@ -108,66 +108,78 @@ exports.getAnggotaDivisi = (req, res) => {
 };
 
 exports.getReport = (req, res) => {
-	let sql = `SELECT a.nik,a.name as nama, b.nama as jabatan,c.kode_kompetensi,c.nilai FROM karyawan a
+	let sql = `SELECT a.nik,a.name as nama, b.nama as jabatan,c.kode_kompetensi,
+	c.nilai,c.jumlah_atasan,c.rekap_atasan FROM karyawan a
 INNER JOIN jabatan b ON a.kode_jabatan=b.kode_jabatan
 INNER JOIN master_jawaban c ON a.nik=c.nik
 WHERE a.kode_divisi="${req.body.kode_divisi}" AND c.periode="${req.body.periode}"`;
 	connection.query(sql, (err, result) => {
 		if (err) console.log(err);
-		const data = [];
+		if (result.length) {
+			const data = [];
 
-		_.forEach(result, (item, index) => {
-			var existing = data.filter((value, i) => {
-				return value.nik === item.nik;
+			_.forEach(result, (item, index) => {
+				var existing = data.filter((value, i) => {
+					return value.nik === item.nik;
+				});
+
+				if (existing.length) {
+					var existingIndex = data.indexOf(existing[0]);
+
+					data[existingIndex].nilai.push({
+						kode_kompetensi: item.kode_kompetensi,
+						nilai: item.nilai,
+					});
+				} else {
+					data.push({
+						nik: item.nik,
+						nama: item.nama,
+						jabatan: item.jabatan,
+						jumlah: item.jumlah_atasan,
+						skor: item.rekap_atasan,
+						nilai: [
+							{
+								kode_kompetensi: item.kode_kompetensi,
+								nilai: item.nilai,
+							},
+						],
+					});
+				}
 			});
 
-			if (existing.length) {
-				var existingIndex = data.indexOf(existing[0]);
-
-				data[existingIndex].nilai.push({
-					kode_kompetensi: item.kode_kompetensi,
-					nilai: item.nilai,
-				});
-			} else {
-				data.push({
-					nik: item.nik,
-					nama: item.nama,
-					jabatan: item.jabatan,
-					nilai: [
-						{
-							kode_kompetensi: item.kode_kompetensi,
-							nilai: item.nilai,
-						},
-					],
-				});
-			}
-		});
-
-		let sql = " SELECT * FROM master_kompetensi";
-		connection.query(sql, (err, result) => {
-			for (i in result) {
-				let filter;
-				_.forEach(data, (item, index) => {
-					filter = item.nilai.filter((value, index) => {
-						return value.kode_kompetensi === result[i].kode_kompetensi;
-					});
-					if (filter.length) {
-						return null;
-					} else {
-						data[index].nilai.splice(i, 0, {
-							kode_kompetensi: result[i].kode_kompetensi,
-							nilai: 0,
+			let sql = " SELECT * FROM master_kompetensi";
+			connection.query(sql, (err, result) => {
+				for (i in result) {
+					let filter;
+					_.forEach(data, (item, index) => {
+						filter = item.nilai.filter((value, index) => {
+							return value.kode_kompetensi === result[i].kode_kompetensi;
 						});
-					}
-				});
-			}
+						if (filter.length) {
+							return null;
+						} else {
+							data[index].nilai.splice(i, 0, {
+								kode_kompetensi: result[i].kode_kompetensi,
+								nilai: 0,
+							});
+						}
+					});
+				}
 
+				res.send(
+					JSON.stringify({
+						response: data,
+					})
+				);
+			});
+		} else {
 			res.send(
 				JSON.stringify({
-					response: data,
+					error: true,
+					response: "Data pada periode ini kosong",
 				})
 			);
-		});
+		}
 	});
 };
 

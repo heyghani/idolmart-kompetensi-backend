@@ -171,7 +171,8 @@ exports.getNilai = (req, res) => {
 					JSON.stringify({
 						code: 200,
 						error: true,
-						response: "Anda tidak dapat melakukan assignment",
+						response:
+							"Anda tidak dapat melakukan assignment. Nilai final telah di update",
 					})
 				);
 			} else {
