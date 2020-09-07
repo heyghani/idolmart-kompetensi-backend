@@ -42,6 +42,7 @@ const {
 	delKompetensi,
 	addKompetensi,
 	getEditKompetensi,
+	getKamus,
 } = require("./roles/roles");
 
 const { getBobot, filterByKompetensi } = require("./bobot/bobot");
@@ -65,6 +66,7 @@ app.post("/api/anggota", getAnggota);
 app.get("/api/jabatan", getJabatan);
 app.get("/api/table", getTableKomepetensi);
 app.delete("/api/roles", updateRoles);
+app.get("/api/kamus/get", getKamus);
 app.post("/api/kompetensi/submit", submitForm);
 app.get("/api/kompetensi/get", getKompetensi);
 app.get("/api/kompetensi/:id", getEditKompetensi);

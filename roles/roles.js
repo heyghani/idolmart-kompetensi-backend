@@ -99,6 +99,19 @@ exports.getEditKompetensi = (req, res) => {
 	});
 };
 
+exports.getKamus = (req, res) => {
+	let sql = `SELECT a.nama, b.* FROM master_kompetensi a 
+	INNER JOIN form_kompetensi b ON a.kode_kompetensi=b.kode_kompetensi`;
+	connection.query(sql, (err, result) => {
+		if (err) console.log(err);
+		res.send(
+			JSON.stringify({
+				response: result,
+			})
+		);
+	});
+};
+
 exports.updateRoles = (req, res) => {
 	let sql = `DELETE FROM master_bobot WHERE kode_kompetensi="${req.body.kode_kompetensi}"`;
 	connection.query(sql, (err, result) => {

@@ -7,13 +7,13 @@
 #     "kelas" : 2
 # }
 
-POST http://localhost:5000/api/report/get
-content-type: application/json
+# POST http://localhost:5000/api/report/get
+# content-type: application/json
 
-{
-    "kode_divisi" : "405",
-    "periode" : "periode1",
-    "kelas" : 1
-}
+# {
+#     "kode_divisi" : "405",
+#     "periode" : "periode1",
+#     "kelas" : 1
+# }
 
-# GET  http://localhost:5000/api/report/test
+GET  http://localhost:5000/api/kamus/get
