@@ -165,17 +165,27 @@ exports.getNilai = (req, res) => {
 	connection.query(sql, (err, result) => {
 		if (err) console.log("error : " + err);
 		if (result.length) {
-			res.send(
-				JSON.stringify({
-					status: 200,
-					error: null,
-					response: result,
-				})
-			);
+			const kelas = result[0].kelas;
+			if (req.body.kelas > kelas) {
+				res.send(
+					JSON.stringify({
+						code: 200,
+						error: true,
+						response: "Anda tidak dapat melakukan assignment",
+					})
+				);
+			} else {
+				res.send(
+					JSON.stringify({
+						error: null,
+						response: result,
+					})
+				);
+			}
 		} else {
 			res.send(
 				JSON.stringify({
-					status: 400,
+					code: 400,
 					error: true,
 					response: "Data pada periode ini kosong",
 				})
