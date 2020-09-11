@@ -37,6 +37,7 @@ exports.login = (req, res) => {
 			);
 		} else {
 			const confirm = result[0].password;
+			const divisi = result[0].kode_divisi;
 
 			if (confirm === "") {
 				res.send(
@@ -51,13 +52,18 @@ exports.login = (req, res) => {
 				try {
 					bcrypt.compare(req.body.password, confirm, (err, hash) => {
 						if (hash) {
-							res.send(
-								JSON.stringify({
-									status: 200,
-									error: null,
-									response: result,
-								})
-							);
+							let sql = `SELECT MAX(kelas) AS max FROM karyawan WHERE kode_divisi="${divisi}"`;
+							connection.query(sql, (err, max) => {
+								if (err) console.log(err);
+								res.send(
+									JSON.stringify({
+										status: 200,
+										error: null,
+										response: result,
+										max,
+									})
+								);
+							});
 						} else {
 							res.send(
 								JSON.stringify({
@@ -94,16 +100,39 @@ WHERE nik=${req.params.id}`;
 };
 
 exports.getAnggotaDivisi = (req, res) => {
-	let sql = `SELECT * from karyawan WHERE kode_divisi='${req.body.divisi}' AND kelas > ${req.body.kelas}`;
+	let sql = `SELECT kelas from karyawan WHERE kode_divisi='${req.body.divisi}' AND kelas > ${req.body.kelas} 
+	GROUP BY kelas ORDER BY kelas ASC LIMIT 2`;
 	connection.query(sql, (err, result) => {
 		if (err) console.log("error : " + err);
-		res.send(
-			JSON.stringify({
-				status: 200,
-				error: null,
-				response: result,
-			})
-		);
+
+		if (result.length === 1) {
+			var kelas = result[0].kelas;
+			let sql = `SELECT * FROM karyawan WHERE kode_divisi='${req.body.divisi}' AND kelas='${kelas}'`;
+			connection.query(sql, (err, result) => {
+				if (err) console.log(err);
+				res.send(
+					JSON.stringify({
+						status: 200,
+						error: null,
+						response: result,
+					})
+				);
+			});
+		} else {
+			var satu = result[0].kelas;
+			var dua = result[1].kelas;
+			let sql = `SELECT * FROM karyawan WHERE kode_divisi="${req.body.divisi}" AND kelas IN (${satu},${dua})`;
+			connection.query(sql, (err, result) => {
+				if (err) console.log(err);
+				res.send(
+					JSON.stringify({
+						status: 200,
+						error: null,
+						response: result,
+					})
+				);
+			});
+		}
 	});
 };
 

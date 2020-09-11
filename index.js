@@ -23,6 +23,14 @@ const {
 } = require("./form/form-penilaian");
 
 const {
+	getLokasi,
+	getAnggotaLokasi,
+	getAnggotaToko,
+	getLevelToko,
+	getAnggotaKepalaToko,
+} = require("./form/area");
+
+const {
 	getUser,
 	getAnggotaDivisi,
 	login,
@@ -62,6 +70,12 @@ app.get("/api/category/:id", getCategory);
 app.post("/api/nilai", getNilai);
 app.post("/api/rekap", getRekap);
 app.post("/api/anggota", getAnggota);
+
+app.post("/api/level", getLevelToko);
+app.post("/api/lokasi", getLokasi);
+app.post("/api/lokasi/anggota", getAnggotaLokasi);
+app.post("/api/lokasi/anggota/toko", getAnggotaToko);
+app.post("/api/lokasi/anggota/kepala", getAnggotaKepalaToko);
 
 app.get("/api/jabatan", getJabatan);
 app.get("/api/table", getTableKomepetensi);

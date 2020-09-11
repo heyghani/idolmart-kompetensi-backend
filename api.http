@@ -16,4 +16,13 @@
 #     "kelas" : 1
 # }
 
-GET  http://localhost:5000/api/kamus/get
+# GET  http://localhost:5000/api/kamus/get
+
+
+POST http://localhost:5000/api/divisi
+content-type: application/json
+
+{
+    "kelas" : 2,
+    "divisi" : 405
+}
