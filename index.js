@@ -55,6 +55,8 @@ const {
 
 const { getBobot, filterByKompetensi } = require("./bobot/bobot");
 
+const { getDepartment } = require("./hrd/hrd");
+
 app.post("/api/login", login);
 app.post("/api/signup", signup);
 app.get("/api/user/:id", getUser);
@@ -93,6 +95,8 @@ app.post("/api/filter/kompetensi", filterByKompetensi);
 
 app.post("/api/report/get", getReport);
 app.post("/api/report/anggota", getReportAnggota);
+
+app.get("/api/department/get", getDepartment);
 
 app.get("/api/report/test", testing);
 

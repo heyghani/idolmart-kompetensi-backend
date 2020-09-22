@@ -76,7 +76,7 @@ exports.postForm = (req, res) => {
 					if (err) console.log(err);
 
 					let sql = `INSERT INTO master_jawaban 
-				(nik, kode_kompetensi,bobot,nilai,skor,jumlah,rekap,keterangan,nilai_atasan,skor_atasan,jumlah_atasan,rekap_atasan,periode,kelas) 
+				(nik,kode_divisi,kode_kompetensi,bobot,nilai,skor,jumlah,rekap,keterangan,nilai_atasan,skor_atasan,jumlah_atasan,rekap_atasan,periode,kelas) 
 				VALUES ?`;
 					connection.query(sql, values, (err, result) => {
 						if (err) console.log("error : " + err);
@@ -91,7 +91,7 @@ exports.postForm = (req, res) => {
 				});
 			} else {
 				let sql = `INSERT INTO master_jawaban 
-		(nik, kode_kompetensi,bobot,nilai,skor,jumlah,rekap,keterangan,nilai_atasan,skor_atasan,jumlah_atasan,rekap_atasan,periode,kelas) 
+		(nik,kode_divisi, kode_kompetensi,bobot,nilai,skor,jumlah,rekap,keterangan,nilai_atasan,skor_atasan,jumlah_atasan,rekap_atasan,periode,kelas) 
 		VALUES ?`;
 				connection.query(sql, values, (err, result) => {
 					if (err) console.log("error : " + err);
@@ -115,7 +115,7 @@ exports.updateForm = (req, res) => {
 		if (err) console.log(err);
 
 		let sql = `INSERT INTO master_jawaban 
-		(nik, kode_kompetensi,bobot,nilai,skor,jumlah,rekap,keterangan,
+		(nik,kode_divisi, kode_kompetensi,bobot,nilai,skor,jumlah,rekap,keterangan,
 		keterangan_atasan,nilai_atasan,skor_atasan,jumlah_atasan,rekap_atasan,periode,kelas) 
 		VALUES ?`;
 		connection.query(sql, values, (err, result) => {
